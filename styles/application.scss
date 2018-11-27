@@ -1,2 +1,9 @@
-// This is the top-level scss file. Import all other files in here.
+// Normalize
+@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
+
+// Lib
+@import 'settings';
+@import 'mixins';
+
+// Base
 @import 'home';
