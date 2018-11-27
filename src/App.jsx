@@ -8,7 +8,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      data,
+      messages: data.messages,
       loading: true,
     };
   }
@@ -18,6 +18,15 @@ class App extends Component {
     setTimeout(() => {
       this.setState({loading: false});
     }, 3000);
+
+    setTimeout(() => {
+      // Add a new message to the list of messages in the data store
+      const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
+      const messages = this.state.messages.concat(newMessage);
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      this.setState({messages: messages});
+    }, 5000);
   }
 
   render() {
@@ -36,7 +45,7 @@ class App extends Component {
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
-          <MessageList messages = {this.state.data.messages}/>
+          <MessageList messages = {this.state.messages} />
           <ChatBar />
         </Fragment>
       );
