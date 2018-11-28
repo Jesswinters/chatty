@@ -58,8 +58,6 @@ class App extends Component {
     const message = event.currentTarget.message.value;
     let username = event.currentTarget.username.value;
 
-    console.log('new message event');
-
     let newMessage = {
       username,
       content: message,
@@ -90,8 +88,6 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(notification));
-
-    console.log(`${this.state.currentUser.name} has changed their name to ${username}`);
   }
 
   render() {
