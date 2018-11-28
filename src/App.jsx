@@ -8,9 +8,12 @@ class App extends Component {
     super(props);
 
     this.state = {
+      currentUser: {name: 'Jess'},
       messages: data.messages,
       loading: true,
     };
+
+    this.newMessage = this.newMessage.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +32,31 @@ class App extends Component {
     }, 5000);
   }
 
+  newMessage(event) {
+    const message = event.currentTarget.message.value;
+    let username = event.currentTarget.username.value;
+
+    // Check if username exists. If it does exist, set the currentUser state of App to username.
+    if (username) {
+      this.setState({currentUser: {name: username}});
+    } else {
+      username = this.state.currentUser.name;
+    }
+
+    const newId = this.state.messages.length + 10;
+    const newMessage = {
+      id: newId,
+      username,
+      content: message,
+      type: 'incomingMessage',
+    };
+    const messages = this.state.messages.concat(newMessage);
+
+    this.setState({
+      messages: messages
+    });
+  }
+
   render() {
     if (this.state.loading) {
       return (
@@ -45,8 +73,8 @@ class App extends Component {
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
-          <MessageList messages = {this.state.messages} />
-          <ChatBar />
+          <MessageList messages={this.state.messages} />
+          <ChatBar onNewMessage={this.newMessage} />
         </Fragment>
       );
     }
