@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-import data from './data.json';
 
 class App extends Component {
   constructor(props) {
@@ -9,7 +8,6 @@ class App extends Component {
 
     this.state = {
       currentUser: {name: 'Anonymous'},
-      // messages: data.messages,
       messages: [],
       loading: true,
     };
@@ -17,24 +15,38 @@ class App extends Component {
     this.socket = new WebSocket('ws://localhost:3001/');
 
     this.newMessage = this.newMessage.bind(this);
+    this.usernameChange = this.usernameChange.bind(this);
   }
 
   componentDidMount() {
+    this.socket.onopen = (event) => {
+      console.log('Connected to server');
+    };
+
     // After 3 seconds, set `loading` to false in the state.
     setTimeout(() => {
       this.setState({loading: false});
     }, 2000);
 
-    this.socket.addEventListener('message', (message) => {
+    this.socket.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+
       this.setState(
         {
-          messages: this.state.messages.concat(JSON.parse(message.data))
+          messages: this.state.messages.concat(JSON.parse(event.data))
         }
       );
-    });
 
-    this.socket.onopen = (event) => {
-      console.log('Connected to server');
+      switch(data.type) {
+        case 'incomingMessage':
+          break;
+        case 'incomingNotification':
+          this.usernameChange;
+          break;
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error('Unknown event type ' + data.type);
+      }
     };
   }
 
@@ -44,6 +56,21 @@ class App extends Component {
 
   newMessage(event) {
     const message = event.currentTarget.message.value;
+    let username = event.currentTarget.username.value;
+
+    console.log('new message event');
+
+    let newMessage = {
+      username,
+      content: message,
+      type: 'postMessage',
+      update: `Incoming message from ${username}`,
+    };
+
+    this.socket.send(JSON.stringify(newMessage));
+  }
+
+  usernameChange(event) {
     let username = event.currentTarget.username.value;
 
     // Check if username exists. If it does exist, set the currentUser state of App to username.
@@ -57,13 +84,14 @@ class App extends Component {
       username = this.state.currentUser.name;
     }
 
-    let newMessage = {
-      username,
-      content: message,
-      // type: 'incomingMessage',
+    let notification = {
+      type: 'postNotification',
+      update: `${this.state.currentUser.name} has changed their name to ${username}`,
     };
 
-    this.socket.send(JSON.stringify(newMessage));
+    this.socket.send(JSON.stringify(notification));
+
+    console.log(`${this.state.currentUser.name} has changed their name to ${username}`);
   }
 
   render() {
@@ -83,7 +111,7 @@ class App extends Component {
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
           <MessageList messages={this.state.messages} />
-          <ChatBar onNewMessage={this.newMessage} currentUser={this.state.currentUser.name} />
+          <ChatBar onNewMessage={this.newMessage} currentUser={this.state.currentUser.name} onUsernameChange={this.usernameChange} />
         </Fragment>
       );
     }
