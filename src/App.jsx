@@ -8,10 +8,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: 'Jess'},
-      messages: data.messages,
+      currentUser: {name: 'Anonymous'},
+      // messages: data.messages,
+      messages: [],
       loading: true,
     };
+
+    this.socket = new WebSocket('ws://localhost:3001/');
 
     this.newMessage = this.newMessage.bind(this);
   }
@@ -20,16 +23,23 @@ class App extends Component {
     // After 3 seconds, set `loading` to false in the state.
     setTimeout(() => {
       this.setState({loading: false});
-    }, 3000);
+    }, 2000);
 
-    setTimeout(() => {
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
-      const messages = this.state.messages.concat(newMessage);
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages});
-    }, 5000);
+    this.socket.addEventListener('message', (message) => {
+      this.setState(
+        {
+          messages: this.state.messages.concat(JSON.parse(message.data))
+        }
+      );
+    });
+
+    this.socket.onopen = (event) => {
+      console.log('Connected to server');
+    };
+  }
+
+  componentWillUnmount() {
+    this.wss.close();
   }
 
   newMessage(event) {
@@ -38,23 +48,22 @@ class App extends Component {
 
     // Check if username exists. If it does exist, set the currentUser state of App to username.
     if (username) {
-      this.setState({currentUser: {name: username}});
+      this.setState(
+        {
+          currentUser: {name: username}
+        }
+      );
     } else {
       username = this.state.currentUser.name;
     }
 
-    const newId = this.state.messages.length + 10;
-    const newMessage = {
-      id: newId,
+    let newMessage = {
       username,
       content: message,
-      type: 'incomingMessage',
+      // type: 'incomingMessage',
     };
-    const messages = this.state.messages.concat(newMessage);
 
-    this.setState({
-      messages: messages
-    });
+    this.socket.send(JSON.stringify(newMessage));
   }
 
   render() {
@@ -74,7 +83,7 @@ class App extends Component {
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
           <MessageList messages={this.state.messages} />
-          <ChatBar onNewMessage={this.newMessage} />
+          <ChatBar onNewMessage={this.newMessage} currentUser={this.state.currentUser.name} />
         </Fragment>
       );
     }
