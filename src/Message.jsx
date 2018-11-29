@@ -8,7 +8,7 @@ function Message(props) {
       <Fragment>
         <div className="message system">{msg.update}</div>
         <div className="message">
-          <span className="message-username" style={{color: msg.color}}>{msg.username}</span>
+          <span className="message-username" style={{color: msg.color}}>{msg.username}:</span>
           <span className="message-content">
             {msg.content}
             {msg.image ? <img src={msg.image} className="message-image" /> : null}
