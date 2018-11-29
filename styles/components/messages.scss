@@ -1,0 +1,48 @@
+.messages {
+  margin: $space-xx-small 0 $space-xxx-large;
+}
+
+.message {
+  display: block;
+  padding: $space-xx-small;
+
+  @include media($min: $bp-small) {
+    display: flex;
+  }
+}
+
+.message.system {
+  padding: $space-xx-small 20px;
+  font-style: italic;
+}
+
+.message-content,
+.message-username {
+  overflow: hidden;
+  padding: 0 $space-xx-small;
+  margin: $space-xxx-small;
+
+  @include media($max: $bp-small) {
+    display: block;
+  }
+}
+
+.message-image {
+  display: block;
+  max-width: 100%;
+  margin-top: $space-xx-small;
+
+  @include media($min: $bp-small) {
+    max-width: 60%;
+    margin-left: $space-xxx-small;
+  }
+}
+
+.message-content {
+  flex: 8;
+}
+
+.message-username {
+  flex: 2;
+  font-weight: 700;
+}
