@@ -7,7 +7,10 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: 'Anonymous'},
+      currentUser: {
+        name: 'Anonymous',
+        color: '#000000',
+      },
       loading: true,
       messages: [],
       numberofUsers: 0,
@@ -17,6 +20,7 @@ class App extends Component {
 
     this.newMessage = this.newMessage.bind(this);
     this.usernameChange = this.usernameChange.bind(this);
+    this.generateRandomColor = this.generateRandomColor.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +71,7 @@ class App extends Component {
     let username = event.currentTarget.username.value;
 
     let newMessage = {
+      color: this.state.currentUser.color,
       username,
       content: message,
       type: 'postMessage',
@@ -83,7 +88,10 @@ class App extends Component {
     if (username) {
       this.setState(
         {
-          currentUser: {name: username}
+          currentUser: {
+            name: username,
+            color: this.generateRandomColor(),
+          }
         }
       );
     } else {
@@ -96,6 +104,17 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(notification));
+  }
+
+  generateRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+
+    return color;
   }
 
   render() {
