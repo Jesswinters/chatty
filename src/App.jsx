@@ -76,13 +76,20 @@ class App extends Component {
   }
 
   newMessage(event) {
-    const message = event.currentTarget.message.value;
+    const regexImageUrl = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)/gi;
     let username = event.currentTarget.username.value;
+    let message = event.currentTarget.message.value;
+    let image = message.match(regexImageUrl);
+
+    if (image) {
+      message = message.replace(regexImageUrl, '');
+    }
 
     let newMessage = {
       color: this.state.currentUser.color,
       username,
       content: message,
+      image,
       type: 'postMessage',
       update: `Incoming message from ${username}`,
     };
@@ -116,7 +123,7 @@ class App extends Component {
   }
 
   pickRandomColor() {
-    const colorsArray = ['#FF0000', '#00FF00', '#0000FF', '#FFD700'];
+    const colorsArray = ['#E03138', '#5FB14F', '#167FFB', '#FFD700'];
     const randomColor = colorsArray[Math.floor(Math.random() * colorsArray.length)];
 
     return randomColor;
