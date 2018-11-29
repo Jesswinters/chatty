@@ -34,11 +34,6 @@ class App extends Component {
 
       switch(data.type) {
         case 'incomingMessage':
-          this.setState(
-            {
-              messages: this.state.messages.concat(JSON.parse(event.data))
-            }
-          );
           break;
         case 'incomingNotification':
           this.usernameChange;
@@ -54,6 +49,12 @@ class App extends Component {
           // show an error in the console if the message type is unknown
           throw new Error('Unknown event type ' + data.type);
       }
+
+      this.setState(
+        {
+          messages: this.state.messages.concat(JSON.parse(event.data))
+        }
+      );
     };
   }
 
@@ -78,7 +79,7 @@ class App extends Component {
   usernameChange(event) {
     let username = event.currentTarget.username.value;
 
-    // Check if username exists. If it does exist, set the currentUser state of App to username.
+    // Check if username exists. If it does exist, set the currentUser state of app to username.
     if (username) {
       this.setState(
         {
