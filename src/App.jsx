@@ -8,8 +8,9 @@ class App extends Component {
 
     this.state = {
       currentUser: {name: 'Anonymous'},
-      messages: [],
       loading: true,
+      messages: [],
+      numberofUsers: 0,
     };
 
     this.socket = new WebSocket('ws://localhost:3001/');
@@ -31,17 +32,23 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
 
-      this.setState(
-        {
-          messages: this.state.messages.concat(JSON.parse(event.data))
-        }
-      );
-
       switch(data.type) {
         case 'incomingMessage':
+          this.setState(
+            {
+              messages: this.state.messages.concat(JSON.parse(event.data))
+            }
+          );
           break;
         case 'incomingNotification':
           this.usernameChange;
+          break;
+        case 'numberOnlineUsers':
+          this.setState(
+            {
+              numberofUsers: data.numberofUsers
+            }
+          );
           break;
         default:
           // show an error in the console if the message type is unknown
@@ -96,6 +103,9 @@ class App extends Component {
         <Fragment>
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
+            <span className="navbar-users-online">
+              {this.state.numberofUsers} {(this.state.numberofUsers === 1) ? 'user online' : 'users online'}
+            </span>
           </nav>
           <div className="loading">Loading...</div>
         </Fragment>
@@ -105,6 +115,9 @@ class App extends Component {
         <Fragment>
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
+            <span className="navbar-users-online">
+              {this.state.numberofUsers} {(this.state.numberofUsers === 1) ? 'user online' : 'users online'}
+            </span>
           </nav>
           <MessageList messages={this.state.messages} />
           <ChatBar onNewMessage={this.newMessage} currentUser={this.state.currentUser.name} onUsernameChange={this.usernameChange} />
