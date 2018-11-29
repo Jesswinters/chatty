@@ -3,6 +3,7 @@ import React, {Fragment} from 'react';
 function Message(props) {
   const msg = props.message;
 
+  // Check message type, display appropriate information from websocket server
   if (msg.type === 'incomingMessage') {
     return (
       <Fragment>

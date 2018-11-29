@@ -7,6 +7,8 @@ class ChatBar extends Component {
     this.onMessageInput = this.onMessageInput.bind(this);
   }
 
+  // Check if the enter key is pressed on the message or username inputs,
+  // then send the info to the functions in App.jsx
   onMessageInput(event) {
     if (event.key === 'Enter' && event.currentTarget.message.value) {
       this.props.onNewMessage(event);

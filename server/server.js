@@ -16,9 +16,8 @@ const server = express()
 const wss = new SocketServer({ server });
 
 // Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
-
+// When a client connects they are assigned a socket,
+// represented by the ws parameter in the callback
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach((client) => {
     if (client.readyState === ws.OPEN) {
@@ -30,6 +29,7 @@ wss.broadcast = function broadcast(data) {
 wss.on('connection', (socket) => {
   console.log('Client connected');
 
+  // Determine how many users are connected to the app
   let numberOfUsersOnline = wss.clients.size;
   let onlineUsers = {
     id: uuidv1(),
@@ -41,6 +41,7 @@ wss.on('connection', (socket) => {
   wss.broadcast(JSON.stringify(onlineUsers));
   console.log(numberOfUsersOnline);
 
+  // Receive message and send back a type depending on which type was received
   socket.on('message', function incoming(message) {
     const serverMessage = JSON.parse(message);
     serverMessage.id = uuidv1();
@@ -58,7 +59,8 @@ wss.on('connection', (socket) => {
     wss.broadcast(JSON.stringify(serverMessage));
   });
 
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  // Set up a callback for when a client closes the socket
+  // This usually means they closed their browser
   socket.on('close', () => {
     numberOfUsersOnline = wss.clients.size;
     onlineUsers = {
@@ -66,8 +68,8 @@ wss.on('connection', (socket) => {
       type: 'numberOnlineUsers',
       update: 'User has gone offline',
     };
+
     wss.broadcast(JSON.stringify(onlineUsers));
-    console.log('users after delete: ' + numberOfUsersOnline);
 
     console.log('Client disconnected');
   });

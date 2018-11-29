@@ -35,6 +35,7 @@ class App extends Component {
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
 
+      // Display different messages depending on message type from the websocket server
       switch(data.type) {
         case 'incomingMessage':
           break;
@@ -49,7 +50,7 @@ class App extends Component {
           );
           break;
         default:
-          // show an error in the console if the message type is unknown
+          // Show an error in the console if the message type is unknown
           throw new Error('Unknown event type ' + data.type);
       }
 
@@ -60,6 +61,7 @@ class App extends Component {
       );
     };
 
+    // Update the currentUser state with a randomly picked color
     this.setState(
       {
         currentUser:
@@ -75,6 +77,7 @@ class App extends Component {
     this.wss.close();
   }
 
+  // Setup a new message to send to the websocket server
   newMessage(event) {
     const regexImageUrl = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)/gi;
     let username = event.currentTarget.username.value;
@@ -97,6 +100,7 @@ class App extends Component {
     this.socket.send(JSON.stringify(newMessage));
   }
 
+  // Update the username and display a notification
   usernameChange(event) {
     let username = event.currentTarget.username.value;
 
@@ -122,6 +126,7 @@ class App extends Component {
     this.socket.send(JSON.stringify(notification));
   }
 
+  // Pick a random color from an array of 4 colors
   pickRandomColor() {
     const colorsArray = ['#E03138', '#5FB14F', '#167FFB', '#FFD700'];
     const randomColor = colorsArray[Math.floor(Math.random() * colorsArray.length)];

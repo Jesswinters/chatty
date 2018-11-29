@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import Message from './Message.jsx';
 
+// Loop through messages to display all messages and info in the message list
 const renderMessages = (messages) => messages.map(
   (message) => <Message message={message} key={message.id}/>
 );
