@@ -1,44 +1,47 @@
-React Boilerplate
+Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+A chat app built on ReactJS using websockets. Allows local chatting and displaying of images and gifs!
 
-### Usage
+## Final Product
 
-Clone the boilerplate and create your own git repo.
+###### Screenshots:
+!["Screenshot of Chatty App messages"](https://github.com/Jesswinters/chatty/blob/master/docs/chatty-screenshot.png)
+
+### Technical Specifications
+
+React, Webpack with Babel, JSX, ES6, webpack dev server, WebSockets using Node package ws on the server-side, and native WebSocket on client side
+
+###### Installation
+
+Clone the project:
 
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+git clone git@github.com:Jesswinters/chatty.git
 ```
 
-Install the dependencies and start the server.
+CD into the server folder and start the server:
 
 ```
+cd /chatty/server
+npm install
+npm start
+```
+
+CD into the project and start the app:
+
+```
+cd /chatty
 npm install
 npm start
 open http://localhost:3000
 ```
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
+Start chatting!
 
 ### Dependencies
 
+* Node 5.10.x or above
 * React
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
