@@ -20,7 +20,7 @@ class App extends Component {
 
     this.newMessage = this.newMessage.bind(this);
     this.usernameChange = this.usernameChange.bind(this);
-    this.generateRandomColor = this.generateRandomColor.bind(this);
+    this.pickRandomColor = this.pickRandomColor.bind(this);
   }
 
   componentDidMount() {
@@ -90,7 +90,7 @@ class App extends Component {
         {
           currentUser: {
             name: username,
-            color: this.generateRandomColor(),
+            color: this.pickRandomColor(),
           }
         }
       );
@@ -106,15 +106,11 @@ class App extends Component {
     this.socket.send(JSON.stringify(notification));
   }
 
-  generateRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
+  pickRandomColor() {
+    const colorsArray = ['#FF0000', '#00FF00', '#0000FF', '#FFD700'];
+    const randomColor = colorsArray[Math.floor(Math.random() * colorsArray.length)];
 
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-
-    return color;
+    return randomColor;
   }
 
   render() {
