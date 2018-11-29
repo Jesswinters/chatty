@@ -10,11 +10,15 @@ body {
   font-weight: 600;
 }
 
-.chatbar {
+.footer-container {
   position: fixed;
   right: 0;
   bottom: 0;
   left: 0;
+  margin-top: $space-x-small;
+}
+
+.chatbar {
   display: flex;
   padding: $space-xxx-small $space-xx-small;
   background-color: $color-green-medium;

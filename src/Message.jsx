@@ -6,7 +6,7 @@ function Message(props) {
       <Fragment>
         <div className="message system">{props.message.update}</div>
         <div className="message">
-          <span className="message-username" style={{color: `${props.message.color}`}}>{props.message.username}</span>
+          <span className="message-username" style={{color: props.message.color}}>{props.message.username}</span>
           <span className="message-content">{props.message.content}</span>
         </div>
       </Fragment>

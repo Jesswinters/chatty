@@ -9,7 +9,6 @@ class App extends Component {
     this.state = {
       currentUser: {
         name: 'Anonymous',
-        color: '#000000',
       },
       loading: true,
       messages: [],
@@ -56,10 +55,20 @@ class App extends Component {
 
       this.setState(
         {
-          messages: this.state.messages.concat(JSON.parse(event.data))
+          messages: this.state.messages.concat(JSON.parse(event.data)),
         }
       );
     };
+
+    this.setState(
+      {
+        currentUser:
+        {
+          name: this.state.currentUser.name,
+          color: this.pickRandomColor(),
+        }
+      }
+    );
   }
 
   componentWillUnmount() {
@@ -90,7 +99,7 @@ class App extends Component {
         {
           currentUser: {
             name: username,
-            color: this.pickRandomColor(),
+            color: this.state.currentUser.color,
           }
         }
       );

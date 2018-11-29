@@ -19,7 +19,7 @@ class ChatBar extends Component {
   render() {
     return (
       <Fragment>
-        <footer>
+        <footer className="footer-container">
           <form className="chatbar" onKeyPress={this.onMessageInput}>
             <input className="chatbar-username" name="username" placeholder="Your Name (Optional)" defaultValue={this.props.currentUser} />
             <input className="chatbar-message" name="message" placeholder="Type a message and hit ENTER" />
