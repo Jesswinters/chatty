@@ -6,8 +6,6 @@ body {
 
 .loading {
   @include centerer;
-  font-size: $font-larger-size;
-  font-weight: 600;
 }
 
 .footer-container {

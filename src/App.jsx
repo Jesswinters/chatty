@@ -15,6 +15,7 @@ class App extends Component {
       numberofUsers: 0,
     };
 
+    this.scrollMessageList = React.createRef();
     this.socket = new WebSocket('ws://localhost:3001/');
 
     this.newMessage = this.newMessage.bind(this);
@@ -71,6 +72,17 @@ class App extends Component {
         }
       }
     );
+  }
+
+  componentDidUpdate() {
+    if (!this.state.loading) {
+      this.scrollMessageList.current.scrollIntoView(
+        {
+          block: 'end',
+          behavior: 'smooth',
+        }
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -144,7 +156,9 @@ class App extends Component {
               {this.state.numberofUsers} {(this.state.numberofUsers === 1) ? 'user online' : 'users online'}
             </span>
           </nav>
-          <div className="loading">Loading...</div>
+          <div className="loading">
+            <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+          </div>
         </Fragment>
       );
     } else {
@@ -157,6 +171,7 @@ class App extends Component {
             </span>
           </nav>
           <MessageList messages={this.state.messages} />
+          <div ref={this.scrollMessageList}></div>
           <ChatBar onNewMessage={this.newMessage} currentUser={this.state.currentUser.name} onUsernameChange={this.usernameChange} />
         </Fragment>
       );
